@@ -119,16 +119,21 @@ plt.show()
 
 losses = []
 
-for i in range(10):
-    y_pred, indices, gradients = \
-        perform_fwd_passes_and_calc_grads(X_train, 1, w, y_train)
-    row = X_train.loc[0]
-    errors = np.array(MSE(y_train.loc[indices], y_pred))
+for i in range(25):
+    y_pred, indices, gradients = perform_fwd_passes_and_calc_grads(X_train, 0.5, w, y_train)
+    #row = X_train.loc[0]
+    errors = np.array(MSE(y_train, np.dot(X_train, w)))
+    #errors = np.array(MSE(y_train.loc[indices], y_pred))
     loss = np.sum(errors) / errors.shape[0]
     losses += [loss]
     print(f"loss is {loss}")
     gradient = np.average(gradients, axis=0)
+    #gradient
+    #print(f"gradient is {gradient}")
+    #print(f"w before {w}")
+    #print(f"gradient norm is {np.linalg.norm(gradient)}")
     w -= 0.01 * gradient
+    #print(f"w after {w}")
 
 plt.plot(range(len(losses)), losses)
 plt.title("Loss function value")
@@ -171,11 +176,12 @@ w = np.random.rand(insurance_df.shape[1] - 1)
 losses = []
 
 for i in range(300):
-    print(F"EPOCH {i}")
-    y_pred, indices, gradients = \
-        perform_fwd_passes_and_calc_grads(X_train, 0.8, w, y_train)
-    row = X_train.loc[0]
-    errors = np.array(MSE(y_train.loc[indices], y_pred))
+    print(f"EPOCH {i}")
+    y_pred, indices, gradients = perform_fwd_passes_and_calc_grads(X_train, 0.8, w, y_train)
+    #row = X_train.loc[0]
+    #errors = np.array(MSE(y_train.loc[indices], y_pred))
+
+    errors = np.array(MSE(y_train, np.dot(X_train, w)))
     loss = np.sum(errors) / errors.shape[0]
     losses += [loss]
     #print(f"loss is {loss}")
@@ -191,6 +197,7 @@ for i in range(300):
         learning_rate = 0.0003
     w -= learning_rate * gradient
     #print(f"w after {w}")
+
 
 print("DONE!")
 # Plotting loss for multivariate example.
